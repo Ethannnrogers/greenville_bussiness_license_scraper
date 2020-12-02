@@ -7,15 +7,15 @@ class DataController < ApplicationController
     headers = resident_data.row(2)
     resident_formatted = resident_data.drop(2).map do |r|
       row = r.map do |s|
-        s.to_s.strip
+        s.to_s.strip.gsub(/[^a-zA-Z0-9\s]/i, '')
       end
-      {id: 1}.merge(Hash[headers.zip(row)])
+      Hash[headers.zip(row)]
     end
     non_resident_formatted = non_resident_data.drop(2).map do |r|
       row = r.map do |s|
-        s.to_s.strip
+        s.to_s.strip.gsub(/[^a-zA-Z0-9\s]/i, '')
       end
-      {id: 1}.merge(Hash[headers.zip(row)])
+      Hash[headers.zip(row)]
     end
     render json: resident_formatted.take(resident_formatted.length - 1).concat(non_resident_formatted.take(non_resident_formatted.length - 1))
   end
