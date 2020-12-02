@@ -9,13 +9,13 @@ class DataController < ApplicationController
       row = r.map do |s|
         s.to_s.strip
       end
-      Hash[headers.zip(row)]
+      {id: 1}.merge(Hash[headers.zip(row)])
     end
     non_resident_formatted = non_resident_data.drop(2).map do |r|
       row = r.map do |s|
         s.to_s.strip
       end
-      Hash[headers.zip(row)]
+      {id: 1}.merge(Hash[headers.zip(row)])
     end
     render json: resident_formatted.take(resident_formatted.length - 1).concat(non_resident_formatted.take(non_resident_formatted.length - 1))
   end
