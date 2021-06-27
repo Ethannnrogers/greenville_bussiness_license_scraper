@@ -28,7 +28,6 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'pg'
 
 gem 'nokogiri'
-
 gem 'open-uri'
 
 gem 'roo'
