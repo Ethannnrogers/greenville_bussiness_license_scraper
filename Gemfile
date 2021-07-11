@@ -29,6 +29,7 @@ gem 'pg'
 
 gem 'nokogiri'
 gem 'open-uri'
+gem 'puppeteer-ruby'
 
 gem 'roo'
 
