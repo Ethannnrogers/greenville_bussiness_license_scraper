@@ -4,6 +4,8 @@ class ParseWebsiteForData
   WEBSITE_LINK = "https://www.greenvillesc.gov/375/Business-License-Reports".freeze
   COOKIE = "FedAuth=77u/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48U1A+VjEwLDBoLmZ8bWVtYmVyc2hpcHx1cm4lM2FzcG8lM2Fhbm9uI2U3MmNmMGRiYzU1NjExNDRjMzFjMTQxNGE0ZjZmYmIzM2E4Y2ZiNjJjODA1NzYzNjA2YmZhODBkY2I0MDU2YzMsMCMuZnxtZW1iZXJzaGlwfHVybiUzYXNwbyUzYWFub24jZTcyY2YwZGJjNTU2MTE0NGMzMWMxNDE0YTRmNmZiYjMzYThjZmI2MmM4MDU3NjM2MDZiZmE4MGRjYjQwNTZjMywxMzI3MDUwMDQ2NjAwMDAwMDAsMCwxMzI3MDU4NjU2NjkwMzQ1MzQsMC4wLjAuMCwyNTgsZjJlMGNmNzEtZWU3NC00MmE2LTk2MTQtZjA4YzcxNmNhNjA1LCwsOTM4ZWRhOWYtZDBiZi1jMDAwLTRkMDktNmY4YmI0ZmIwOWEyLDkzOGVkYTlmLWQwYmYtYzAwMC00ZDA5LTZmOGJiNGZiMDlhMix5YVFETytYeHBFV1lFQUVOdkxBcWJnLDAsMCwwLCwsLDI2NTA0Njc3NDM5OTk5OTk5OTksMCwsLCwsLCxKbW11cUpPYkVGcGZ6MnBRMlFOY3VBbVZKZHRseFZSN0dpMlIyY3RkMVp2dE4yZ0RpWGZpd0hPMWUzcEZJRUlwUWFuMzVmczB4U2JLQmlJbXBrZThyaW1YcTN5MlFnWDl5R21CdkMwQmt5RytZMUNoazlFN0FrUVNtTGl4VHU3ZTV4SW12NUdrRkFpTncwbEFLQ25BUmxGaEg0ZFVJOEVSSXpBOXhDbEpDWk9MaEw4R2tGSEVNSWg4WjZ5WUQ4YmwzZGtKUHhxSmZhL0hRalh0c1lodWFheEJHUU1oaTJRRW9wQisxVExyTHhsd3Y4WU4zcVFCTmZSSEJPSllNUXVCYUdsUHN3dkZ2TWlRWXFYWUtldDEvNXlvL1NTb3RZUVk0TThmZ3pvYWRsSFFGTGZwdk51blFSUGhoZUtPenNDUEl4cCtIWU5ibmxqQ1pjdHpRejQ4Snc9PTwvU1A+"
   DOMAIN_LINK = "https://greenvillesc1.sharepoint.com/sites/PublicSharing/_layouts/15/download.aspx?UniqueId="
+  CHROME_HEROKU_PATH = "/app/.apt/usr/bin/google-chrome-stable"
+  CHROME_LOCAL_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 
   # Links are fetched by Firefox extension "cliget". Parsed url is https://greenvillesc1.sharepoint.com/sites/PublicSharing/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FPublicSharing%2FShared%20Documents%2FBusiness%20License%2FYear%2Dto%2DDate%20Business%20License%20Reports&p=true&originalPath=aHR0cHM6Ly9ncmVlbnZpbGxlc2MxLnNoYXJlcG9pbnQuY29tLzpmOi9zL1B1YmxpY1NoYXJpbmcvRXRPeFRhM09GX0ZEbDUtZ2dSLS1Qa1FCV1FnMU4wbmYwRmVBWk1LdjllYVdoQT9ydGltZT1NZG1ISG5BNTJVZw
   LINKS = {
@@ -50,10 +52,10 @@ class ParseWebsiteForData
 
   # Fetch cookie by Puppeteer by imitating the browser and getting it's cookie
   def fetch_cookie
-    return @cookie = COOKIE if Rails.env.production?
     @cookie = 'FedAuth='
+    executable_path = Rails.env.production? ? CHROME_HEROKU_PATH : CHROME_LOCAL_PATH
 
-    Puppeteer.launch(headless: true, args: ['--no-sandbox']) do |browser|
+    Puppeteer.launch(headless: true, executable_path: executable_path, args: ['--no-sandbox']) do |browser|
       page = browser.pages.first || browser.new_page
       page.goto("https://greenvillesc1.sharepoint.com/:f:/s/PublicSharing/EtOxTa3OF_FDl5-ggR--PkQBWQg1N0nf0FeAZMKv9eaWhA")
 
